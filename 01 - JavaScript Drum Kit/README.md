@@ -2,7 +2,7 @@
 
 ## Knowledge
 
-###1. Document method `Document.querySelector()`
+### 1. Document method `Document.querySelector()`
 https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
 > The Document method `querySelector()` returns the first `Element` within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
 
