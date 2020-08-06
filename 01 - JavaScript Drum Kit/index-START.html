@@ -59,6 +59,32 @@
 
 <script>
 
+  function playAudio(e) {
+    // ES6 template string: ${} 
+    // CSS Attribute selector  
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+
+    if(!audio) return; // Stop the funtion if no audio returns
+    audio.currentTime = 0; // Rewind music to the start
+    audio.play();
+
+    // Key glowing effect
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    key.classList.add('playing');
+  }
+
+  function removeTransition(e) {
+    // Skip if it's not a transform
+    if (e.propertyName !== 'transform') { return; } 
+    // `this` is the key as which this function works on in L79
+    this.classList.remove('playing');
+  }
+  
+  window.addEventListener('keydown', playAudio); 
+
+  // Listen transtionend event 
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition)); 
 </script>
 
 
