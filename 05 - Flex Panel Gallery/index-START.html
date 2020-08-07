@@ -26,6 +26,8 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
+       /* Make it a flex item */
+      display: flex;
     }
 
     .panel {
@@ -43,6 +45,14 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
+      /* Evenly distribute the extra space among each other*/
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      /* Make it a flex container as well */
+      display: flex;
+      /* Vertically center them in the middle */
+      flex-direction: column;
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -52,10 +62,36 @@
     .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
 
     /* Flex Children */
+    /* Children element in each panel */
     .panel > * {
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+      border: 1px solid red;
+      flex: 1 0 auto;
+      /* Make each children elements a flex container */
+      display: flex;
+      /* Center text */
+      justify-content: center;
+      align-items: center; 
+    }
+
+    /* Take out upper element */
+    .panel > *:first-child {
+      transform: translateY(-100%);
+    }
+
+    .panel.open-active > *:first-child {
+      transform: translateY(0);
+    }
+
+    /* Take out lower element */
+    .panel > *:last-child {
+      transform: translateY(100%);
+    }
+
+    .panel.open-active > *:last-child {
+      transform: translateY(0);
     }
 
     .panel p {
@@ -71,6 +107,8 @@
 
     .panel.open {
       font-size: 40px;
+      /* This element will expand to 5 times of other item's space (1) when triggered */
+      flex: 5; 
     }
 
   </style>
@@ -96,7 +134,7 @@
       <p>Give</p>
       <p>All</p>
       <p>You can</p>
-    </div>
+    </div> 
     <div class="panel panel5">
       <p>Life</p>
       <p>In</p>
@@ -105,9 +143,28 @@
   </div>
 
   <script>
+    // Select all elements under with .panel class
+    const panels = document.querySelectorAll('.panel');
+    console.log(panels); 
+    // Not toggleOpen() because we just send a refernce there
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen));
 
+    function toggleOpen() {  
+      // Add open class
+       this.classList.toggle('open');
+    }
+
+    panels.forEach(panel => panel.addEventListener('transitionend', showWords));
+
+    function showWords(e) {
+      // this will be flex-grow and font-size in Chrome, but flex in Safari
+      // console.log(e.propertyName);
+      if (e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
   </script>
-
+ 
 
 
 </body>
