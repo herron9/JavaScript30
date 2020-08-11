@@ -17,6 +17,57 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+// Fetch data back
+const cities = [];
+// fetch() will return a promise and in then)() the data type is unclear
+// it can be image or some HTML, etc
+fetch(endpoint)
+// the blob has a json() function in it, so we take out the json and use another then() to get the data
+.then(blob => blob.json()) 
+// ... will expand elements of an iterable (like an array) into places 
+.then(data => cities.push(...data));
+
+// Find if a data's city or state part matches what was searched 
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => {
+    // How to put a variable into a regular expression? Need to have a reg to hold it
+    // g = global, i = case insensitive,
+    const regex = new RegExp(wordToMatch, 'gi'); 
+    return place.city.match(regex) || place.state.match(regex);
+  })
+}
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function displayMatches() {
+  const matchArray = findMatches(this.value, cities);
+  // console.log(this.value);
+    console.log(matchArray);
+    const html = matchArray.map(place => {
+      // highlight the matched part, basically replace the matched part with a <span>
+      const regex = new RegExp(this.value, 'gi');
+      const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+      const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+      return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="populatioin">${numberWithCommas(place.population)}</span>
+      </li>
+      `; 
+    }).join(''); // join() will return a string from html array.
+    suggestions.innerHTML = html;
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+// Listen on input change, change only get triggered when you move off the input box
+searchInput.addEventListener('change', displayMatches);
+// So we also listen on keyup event
+searchInput.addEventListener('keyup', displayMatches);
+
 </script>
 </body>
 </html>
