@@ -22,6 +22,7 @@
     // Interpolated
 
     // Styled
+    console.log('%c I am some great text', 'font-size:50px');
 
     // warning!
 
@@ -30,16 +31,39 @@
     // Info
 
     // Testing
+    console.assert(1 === 2, 'This is wrong');
 
     // clearing
+    console.clear();
 
     // Viewing DOM Elements
+    const p = document.querySelector('p');
+    // Show this element
+    console.log(p);
+    // Show all attributes on it 
+    console.dir(p);
 
     // Grouping together
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`)
+      // Or use groupCollapsed(); the group will be collapsed() by default
+      console.log(`this is ${dog.name},`);
+      console.log(`${dog.name} is ${dog.year} years old`);
+      console.groupEnd(`${dog.name}`);
+    });
 
     // counting
+    console.count('test1');
+    console.count('test1');
+    console.count('test2');
+    console.count('test2');
+    console.count('test2');
+    console.count('test2');
+    console.count('test1');
+    console.count('test1');
 
     // timing
+
 
   </script>
 </body>
