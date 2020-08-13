@@ -96,6 +96,36 @@
   </div>
 
 <script>
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+  const items = document.querySelectorAll('.item');
+  console.log(checkboxes);
+
+  let lastChecked; 
+
+  // This seems a bug to me when I hold shift and check a single box, all box from this to the end will be checked, no matter if there's a 2nd key already checked
+  function handleCheck(e) {
+    // Check if the shift key is down and user checks a checkbox
+    let inBetween = false;
+    if (e.shiftKey && this.checked) {
+
+      checkboxes.forEach(checkbox => {
+        // All elements in between will be marked ture
+        if (checkbox === this || checkbox === lastChecked) {
+          inBetween = !inBetween; 
+        }
+
+        // Mark in-between elements as checked
+        if (inBetween) {
+          checkbox.checked = true; 
+        }
+      });
+
+    } 
+
+    lastChecked = this;
+  }
+
+  checkboxes.forEach(box => box.addEventListener('click', handleCheck)); 
 </script>
 </body>
 </html>
