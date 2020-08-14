@@ -7,6 +7,53 @@
 </head>
 <body>
 <script>
+	// My solution 1
+	// const konami_code = ["a", "b", "c", "d", "ArrowUp", "ArrowDown", "x", "y"];
+	// let count = 0;
+	// window.addEventListener('keyup', (e) => {
+	// 	if (e.key === konami_code[count]) {
+	// 		count++;
+	// 	} else {
+	// 		count = 0;
+	// 	}
+	// 	if (count === 8) {
+	// 		console.log("You made it!");
+	// 		count = 0;
+	// 	}
+	// 	console.log(count);
+	// });
+
+	// My solution 2
+	// const pressed = [];
+	// window.addEventListener('keyup', (e) => {
+	// 	pressed.push(e.key);
+
+	// 	for (var i = 0; i <= pressed.length - 1; i++) {
+	// 		// One mismatch will reset the pressed string
+	// 		if (pressed[i] != konami_code[i]) {
+	// 			pressed.length = 0;
+	// 			return; 
+	// 		}
+	// 	}
+
+	// 	if (pressed.length === konami_code.length) {
+	// 		console.log("You made it!");
+	// 		pressed.length = 0;
+	// 	}
+	// });
+
+	// Wesbos's solution
+	const pressed = [];
+	const secretCode = 'ohmygod';
+	window.addEventListener('keyup', (e) => {
+		pressed.push(e.key); 
+		// Only keep the last 6 keys
+		pressed.slice(-secretCode.length -1 , pressed.length - secretCode.length);
+		if (pressed.join('').includes(secretCode)) {
+			console.log("You made it!");
+			cornify_add();
+		}
+	});
 </script>
 </body>
 </html>
