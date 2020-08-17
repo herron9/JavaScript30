@@ -84,6 +84,8 @@
     console.log(wes); 
 
     // Now, change social in dev will also change wes.social, that's BAD!
+
+    // The funtion below will make a copy that wes.social will not be changed by deev2.social
     // Objec to string then to Object, which will erase the reference, but this is not recommended!
     const dev2 = JSON.parse(JSON.stringify(wes));
 
