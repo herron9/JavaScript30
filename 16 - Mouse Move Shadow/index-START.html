@@ -7,7 +7,7 @@
 <body>
 
   <div class="hero">
-    <h1 contenteditable>🔥WOAH!</h1>
+    <h1 contenteditable>我CP是真的！</h1>
   </div>
 
   <style>
@@ -35,6 +35,53 @@
   </style>
 
 <script>
+  const hero = document.querySelector(".hero");
+  const text = document.querySelector("h1");
+  const walk = 100; // 100px, how far the shadow should go when mouse at corner
+  console.log(hero);
+  console.log(text);
+
+  function shadow(e) {
+    // Old way 
+    // const width = hero.offsetWidth;
+    // const height = hero.offsetHeight;
+
+    // Typically, offsetWidth is a measurement in pixels of the element's CSS width, 
+    // including any borders, padding, and vertical scrollbars (if rendered). It does not include // the width of pseudo-elements such as ::before or ::after.
+
+    // ES6 way, Destructuring Assignment Shorthand
+    const { offsetWidth: width, offsetHeight: height } = hero;
+    let { offsetX: x, offsetY: y } = e;
+
+    // If there're chlidren elements instead of hero element, the x and y would be the x and y of that inner element.
+    // FIX: if the event target is not the hero element,modify the value
+    if (this !== e.target) {
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+    }
+
+    // walk = 100, but the actual range we want is -50 ~ 50, so we add - (walk / 2);
+    const xWalk = Math.round((x / width * walk ) - (walk / 2));
+    const yWalk = Math.round((y / height * walk ) - (walk / 2));
+
+    text.style.textShadow = `
+    ${xWalk}px ${yWalk}px 0 rgba(255,0,255, 0.7),
+    ${xWalk * -1}px ${yWalk}px 0 rgba(255,255,0, 0.7),
+    ${yWalk}px ${xWalk * -1}px 0 rgba(0,255,255, 0.7), 
+    ${yWalk* -1}px ${xWalk}px 0 rgba(0,0,255, 0.7)
+    `;
+ 
+    // console.log(width, height);
+    // console.log(x, y);   
+    // console.log(xWalk, yWalk);   
+
+
+
+
+  }
+
+  hero.addEventListener("mousemove", shadow);
+
 </script>
 </body>
 </html>
