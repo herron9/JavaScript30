@@ -23,15 +23,102 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <form id="c"><input class='check' type="submit" value="Check All"></form>
+    <form id="unc"><input class='check' type="submit" value="Uncheck All"></form>
+    <form id="clear"><input class='check' type="submit" value="Clear Menu"></form>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  // Get data from localStorage or just return an empty string
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+  
+  function addItem(e) {
+    // Prevent page from reloading
+    // e.preventDefault();
+    const text = (this.querySelector('[name=item]')).value;
+
+    // Create a new object
+    const item = {
+      text: text, //Or ES6 shorthand version, just text,
+      done: false
+    }
+    items.push(item);
+    populateList(items, itemsList);
+    // Store String in localStorage, note that you can only put string to it
+    localStorage.setItem('items', JSON.stringify(items));
+
+    // Reset a form element
+    this.reset(); 
+  }
+ 
+  // Two variables make this function more resilient
+  function populateList(plates = [], platesList) {
+    let elements = "";
+    // Show "loading when it's empty"
+    if (!plates.length) {
+        elements = '<li>Loading Tapas...</li>';
+    } else {
+        elements = plates.map((plate, i) => {
+          // Why backtick has to follow return?
+          return `
+           <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+            <label for="item${i}">${plate.text}</label>
+          </li>
+          `;
+        }).join(''); 
+    }
+
+    platesList.innerHTML = elements;
+  }
+
+  function toggleDone(e) {
+    if (!e.target.matches('input')) return; //ship this unless it's an input
+    const el = e.target;
+    const index = el.dataset.index;
+    // Update done's value and store new values to localStorage
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+
+  // Extra function
+  const check = document.querySelector('#c');
+  const uncheck = document.querySelector('#unc');
+  const clear = document.querySelector('#clear');
+
+
+  function checkAll() {
+    console.log("...msg");
+    items.forEach(item => item.done = true);
+    populateList(items, itemsList);
+    // Update all
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
+  function uncheckAll() {
+    items.forEach(item => item.done = false);
+    // Update all
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
+  function clearAll() {
+    localStorage.clear();
+    items.clear();
+  }
+
+  check.addEventListener('submit', checkAll);
+  uncheck.addEventListener('submit', uncheckAll);
+  clear.addEventListener('submit', clearAll);
+
+  // Triggered when page refresh
+  populateList(items, itemsList);
 
 </script>
-
 
 </body>
 </html>
