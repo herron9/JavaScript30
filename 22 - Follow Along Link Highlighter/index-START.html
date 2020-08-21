@@ -26,7 +26,54 @@
     </div>
 
   <script>
-    // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+    const links = document.querySelectorAll('a');
+    console.log(links);
+
+    // function addHighlight(e) {
+    //   // My shot
+    //   console.log(this.offsetTop, this.offsetLeft);
+    //   const { offsetTop: top, offsetLeft: left, offsetHeight: height, offsetWidth: width} = this;
+    //   this.classList.add('highlight');
+    //   this.style.top = `${top}px`;
+    //   this.style.left = `${left}px`;
+    //   this.style.position = "initial";
+    //   this.style.width = `${width}px`;
+    //   this.style.height = `${height}px`;
+    //   this.style.display = this.style.display = "block" ? "unset" : this.style.display;
+    // }
+
+    // function removeHighlight() {
+    //   console.log("remove");
+    //   this.classList.remove('highlight');
+
+    // }
+
+    // links.forEach(link => link.addEventListener('mouseenter', addHighlight));
+    // links.forEach(link => link.addEventListener('mouseout', removeHighlight));
+
+
+    // Wesbos's solution
+    const highlight = document.createElement('span');
+    highlight.classList.add('highlight');
+    document.body.append(highlight);
+
+    function highlightLink() {
+      const linkCoords = this.getBoundingClientRect();
+
+      const coords = {
+        width: linkCoords.width,
+        height: linkCoords.height,
+        top: linkCoords.top + window.scrollY,
+        left: linkCoords.left + window.scrollX
+      }
+
+      highlight.style.width = `${coords.width}px`;
+      highlight.style.height = `${coords.height}px`;
+      highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+    }
+
+    links.forEach(link => link.addEventListener('mouseenter', highlightLink));
+
   </script>
 </body>
 </html>
