@@ -42,6 +42,19 @@
 
 <button></button>
 <script>
+  const divs = document.querySelectorAll('div'); 
+
+  function logText(e) {
+    // Stop bubbling up
+    e.stopPropagation();
+    console.log(this.classList.value);
+  }
+
+  // Set capture: true => we will run the function on the way down rathar than on the way up
+  divs.forEach(div => div.addEventListener('click', logText, {
+    capture: false,
+    once: true  // It will listen for a click once and then unbind itself
+  }));
 
 </script>
 </body>
