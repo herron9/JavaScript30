@@ -35,6 +35,39 @@
   </div>
 
 <script>
+    const slider = document.querySelector('.items');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener("mousedown", (e) => {
+        isDown = true;
+        slider.classList.add('active');
+        // We nee to know where a user click inside this slider, so - slider.offsetLeft
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener("mouseleave", () => {
+        isDown = false;
+    });
+
+    slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('active');
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return; //Stop running this function
+        // The Event interface's preventDefault() method tells the user agent that if the event 
+        // does not get explicitly handled, its default action should not be taken as it normally 
+        // would be. 
+        e.preventDefault(); 
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 3; // Speed up
+        slider.scrollLeft = scrollLeft - walk;
+    });
+
 </script>
 
   </body>
