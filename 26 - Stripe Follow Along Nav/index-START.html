@@ -124,7 +124,7 @@
   }
 
   .cool > li {
-    position: relative;
+    position: relative; /*important!*/
     display: flex;
     justify-content: center;
   }
@@ -140,6 +140,17 @@
     transform: translateY(100px);
     will-change: opacity;
     display: none;
+  }
+
+  .trigger-enter {
+    display: block;
+    /*opacity: 1;*/
+  }
+
+  /* We will first change the display to block and wait 150ms before change opcaity*/
+  /* This gives us a better transition*/
+  .trigger-enter-active {
+    opacity: 1;
   }
 
   .trigger-enter .dropdown {
@@ -220,6 +231,46 @@
 </style>
 
 <script>
+  const triggers = document.querySelectorAll('.cool > li');
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+
+  function handleEnter() {
+    this.classList.add('trigger-enter');
+    // Enter a new function will make 'this' change, so we use empty() here and this will be inherited from parent.
+    setTimeout(() => this.classList.add('trigger-enter-active'), 150); 
+    background.classList.add('open');
+
+    // Note: use 'this' here
+    const dropdown = this.querySelector('.dropdown');
+    // This is why we first change its display to block and then opacity, since we need to get the w/h first
+    const dropdownCoords = dropdown.getBoundingClientRect();
+
+    // Get outside box coords
+    const navCoords = nav.getBoundingClientRect();
+
+    const coords = {
+      height: dropdownCoords.height,
+      width: dropdownCoords.width,
+      // offset
+      top: dropdownCoords.top - navCoords.top,
+      left: dropdownCoords.left - navCoords.left,
+    };
+
+    background.style.setProperty('width', `${coords.width}px`);
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+
+  function handleLeave() {
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    background.classList.remove('open');
+  }
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
+
 </script>
 
 </body>
